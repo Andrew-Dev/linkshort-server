@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>linkshort</title>
+
+	<style type="text/css"></style>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <!-- Stylesheets -->
+    <link href="css/format.css" rel="stylesheet" type="text/css">
+    <link href="css/animate.css" rel="stylesheet" type="text/css">
+    <!-- JavaScript -->
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+
+  <div class="col-sm-3">
+  </div><!--com-sm-3-->
+  <div class="col-sm-6">
+	  <div class="animated flipInX">
+	<div class="title">
+		welcome to linkshort
+	</div><!--title-->
+	<hr>
+	<div class="descc">
+		a world-class link shortening service
+	</div>
+	  </div>
+		<div class="input-group" id="theForm">
+		      <input type="text" class="form-control"placeholder="Shorten..." onkeydown="if(event.keyCode == 13){createURL();}" id="urlField" name="url">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button" onclick="createURL();">Launch!</button>
+		      </span>
+			</div><!--input-group-->
+	<div class="output">
+		your shotened url: (URL HERE)
+	</div>
+	</div><!--col-sm-6-->
+  <div class="col-sm-3">
+  </div> <!--col-sm-3-->
+</div> <!--container-->
+<script type="text/javascript">
+$( document).ready(function() {
+  $("#theForm").hide();
+setTimeout(function(){
+$('#theForm').fadeIn(1000);
+},750);
+});
+</script>
+<script type="text/javascript">
+$( document ).ready(function() {
+  $(".output").hide();
+});
+isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
+if(isSafari) {
+  //is safari
+}
+function createURL() {
+
+  var text = $('#urlField').val();
+  if(text.includes(".") && !text.startsWith("http://"))
+  {
+    text = "http://" + text;
+  }
+  $.post("/createLink/", { url: text})
+  .done(function( data ) {
+    if(data.includes("invalid"))
+    {
+      //invalid
+      $(".output").fadeIn(1000);
+      $( ".output" ).html("There was an error. Make sure you entered a valid URL.");
+    }
+    else if(data.startsWith("success: "))
+    {
+      var urlId = data.replace("success: ","");
+      $(".output").fadeIn(1000);
+			$( ".output" ).html('Your shortened URL: <a href="http://lnkshort.xyz/'+urlId+'">'+"http://lnkshort.xyz/"+urlId+"</a>");
+    }
+  });
+}
+
+</script>
+</body>
+
+</html>
